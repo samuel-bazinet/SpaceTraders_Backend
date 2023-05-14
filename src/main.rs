@@ -8,7 +8,5 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let post_response = requests::get_agent(&client).await?;
 
     println!("{}", post_response);
-
-    //println!("{:?}", post_resp);
     Ok(())
 }
