@@ -3,8 +3,10 @@ use std::fmt::Display;
 use serde::{Deserialize, Serialize};
 
 mod agent_response;
+mod location_response;
 pub mod response_fields {
     pub use super::agent_response::AgentResponseFields;
+    pub use super::location_response::LocationResponseFields;
 }
 
 #[derive(Serialize, Deserialize, Debug)]
