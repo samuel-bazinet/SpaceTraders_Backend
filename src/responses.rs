@@ -19,3 +19,9 @@ impl<T: Display> Display for JsonResponse<T> {
         write!(f, "{}", self.data)
     }
 }
+
+impl<T: Default> Default for JsonResponse<T> {
+    fn default() -> Self {
+        Self { data: T::default() }
+    }
+}

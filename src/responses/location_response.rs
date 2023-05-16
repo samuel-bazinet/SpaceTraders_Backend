@@ -1,4 +1,4 @@
-use std::fmt::Display;
+use std::{collections::HashMap, fmt::Display};
 
 use serde::{Deserialize, Serialize};
 
@@ -25,5 +25,21 @@ impl Display for LocationResponseFields {
             "Location Fields:\n\tSystem Symbol: {}\n\tSymbol: {}\n\tType: {}\n\tX: {}\n\tY: {}\n\tOrbitals: {}\n\tTraits: {}\n\tChart: {}\n\tFaction: {}",
             self.systemSymbol, self.symbol, self.r#type, self.x, self.y, self.orbitals, self.traits, self.chart, self.faction
         )
+    }
+}
+
+impl Default for LocationResponseFields {
+    fn default() -> Self {
+        Self {
+            systemSymbol: String::new(),
+            symbol: String::new(),
+            r#type: String::new(),
+            x: 0,
+            y: 0,
+            orbitals: PVec(vec![]),
+            traits: PVec(vec![]),
+            chart: PHashMap(HashMap::new()),
+            faction: PHashMap(HashMap::new()),
+        }
     }
 }

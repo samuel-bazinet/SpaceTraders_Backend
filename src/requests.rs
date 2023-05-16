@@ -1,42 +1,39 @@
-use crate::{
-    constants::TOKEN,
-    responses::{
-        response_fields::{AgentResponseFields, LocationResponseFields},
-        JsonResponse,
-    },
+use crate::responses::{
+    response_fields::{AgentResponseFields, LocationResponseFields},
+    JsonResponse,
 };
-use reqwest::{
-    header::{AUTHORIZATION, CONTENT_TYPE},
-    Client,
-};
+use axum::{extract::Path, http::StatusCode, Json};
 
-pub async fn get_agent(
-    client: &Client,
-) -> Result<JsonResponse<AgentResponseFields>, reqwest::Error> {
-    client
-        .get("https://api.spacetraders.io/v2/my/agent")
-        .header(AUTHORIZATION, format!("Bearer {TOKEN}"))
-        .header(CONTENT_TYPE, "application/json")
-        .send()
-        .await?
-        .json::<JsonResponse<AgentResponseFields>>()
-        .await
+mod game_requests;
+
+pub async fn get_agent() -> (StatusCode, Json<JsonResponse<AgentResponseFields>>) {
+    let client = reqwest::Client::new();
+
+    let game_response = game_requests::get_agent(&client).await;
+
+    if let Ok(response) = game_response {
+        (StatusCode::OK, Json(response))
+    } else {
+        (
+            StatusCode::SERVICE_UNAVAILABLE,
+            Json(JsonResponse::default()),
+        )
+    }
 }
 
 pub async fn get_location(
-    client: &Client,
-    system: String,
-    symbol: String,
-) -> Result<JsonResponse<LocationResponseFields>, reqwest::Error> {
-    client
-        .get(format!(
-            "https://api.spacetraders.io/v2/systems/{}/waypoints/{}",
-            system, symbol
-        ))
-        .header(AUTHORIZATION, format!("Bearer {TOKEN}"))
-        .header(CONTENT_TYPE, "application/json")
-        .send()
-        .await?
-        .json::<JsonResponse<LocationResponseFields>>()
-        .await
+    Path((system, symbol)): Path<(String, String)>,
+) -> (StatusCode, Json<JsonResponse<LocationResponseFields>>) {
+    let client = reqwest::Client::new();
+
+    let game_response = game_requests::get_location(&client, system, symbol).await;
+
+    if let Ok(response) = game_response {
+        (StatusCode::OK, Json(response))
+    } else {
+        (
+            StatusCode::SERVICE_UNAVAILABLE,
+            Json(JsonResponse::default()),
+        )
+    }
 }
