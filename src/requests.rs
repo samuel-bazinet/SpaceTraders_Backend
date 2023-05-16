@@ -1,6 +1,9 @@
 use crate::{
     constants::TOKEN,
-    responses::{response_fields::{AgentResponseFields, LocationResponseFields}, JsonResponse},
+    responses::{
+        response_fields::{AgentResponseFields, LocationResponseFields},
+        JsonResponse,
+    },
 };
 use reqwest::{
     header::{AUTHORIZATION, CONTENT_TYPE},
@@ -23,10 +26,13 @@ pub async fn get_agent(
 pub async fn get_location(
     client: &Client,
     system: String,
-    symbol: String
+    symbol: String,
 ) -> Result<JsonResponse<LocationResponseFields>, reqwest::Error> {
     client
-        .get(format!("https://api.spacetraders.io/v2/systems/{}/waypoints/{}", system, symbol))
+        .get(format!(
+            "https://api.spacetraders.io/v2/systems/{}/waypoints/{}",
+            system, symbol
+        ))
         .header(AUTHORIZATION, format!("Bearer {TOKEN}"))
         .header(CONTENT_TYPE, "application/json")
         .send()
