@@ -1,6 +1,4 @@
-use axum::{
-    routing::get, Router
-};
+use axum::{routing::get, Router};
 use std::{error::Error, net::SocketAddr};
 use tower_http::cors::{Any, CorsLayer};
 
