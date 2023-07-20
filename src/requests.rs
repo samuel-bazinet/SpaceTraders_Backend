@@ -7,6 +7,7 @@ use axum::{extract::Path, http::StatusCode, Json};
 mod game_requests;
 
 pub async fn get_agent() -> (StatusCode, Json<JsonResponse<AgentResponseFields>>) {
+    println!("Handling agent request");
     let client = reqwest::Client::new();
 
     let game_response = game_requests::get_agent(&client).await;
